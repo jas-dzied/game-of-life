@@ -33,6 +33,7 @@ impl State {
             .request_adapter(&wgpu::RequestAdapterOptions::default())
             .await
             .unwrap();
+        println!("{:#?}", adapter.limits());
         let (device, queue) = adapter
             .request_device(
                 &wgpu::DeviceDescriptor {
