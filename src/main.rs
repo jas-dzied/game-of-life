@@ -1,4 +1,5 @@
-use std::time::Instant;
+use std::thread;
+use std::time::{Duration, Instant};
 
 use rand::Rng;
 use wgpu::{Device, Queue};
@@ -112,6 +113,7 @@ impl State {
     }
 
     async fn update(&mut self) {
+        thread::sleep(Duration::from_millis(20));
         let elapsed = self.last_frame.elapsed().as_micros() as f32;
         println!("{}ms since last update", elapsed / 1000.0);
         println!("({} fps)", 1000000.0 / elapsed);
@@ -138,8 +140,8 @@ impl State {
     }
 }
 
-const WIDTH: u32 = 1920;
-const HEIGHT: u32 = 1200;
+const WIDTH: u32 = 400;
+const HEIGHT: u32 = 400;
 
 async fn run() {
     env_logger::init();
@@ -147,7 +149,7 @@ async fn run() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     let mut rng = rand::thread_rng();
     let data = (0..(WIDTH * HEIGHT))
-        .map(|_| rng.gen::<bool>() as u32)
+        .map(|_| rng.gen::<bool>() as u32 * 40)
         .collect::<Vec<_>>();
     let mut state = State::new(window, data, life::Params::new(WIDTH, HEIGHT)).await;
 

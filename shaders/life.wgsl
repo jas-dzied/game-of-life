@@ -31,7 +31,12 @@ fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
     let x = u32(modulus(i32(position.x) + x_mod, i32(params.width)));
     let y = u32(modulus(i32(position.y) + y_mod, i32(params.height)));
     let index = from_xy(x, y);
-    return input_buffer[index];
+    let value = input_buffer[index];
+    if value == u32(40) {
+      return u32(1);  
+    } else {
+      return u32(0);
+    }
 }
 
 @compute
@@ -39,7 +44,7 @@ fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
 fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     let index = from_xy(global_id.x, global_id.y);
-    let value = input_buffer[index];
+    let old_value = input_buffer[index];
 
     var total: u32;
     total += get_at(global_id, -1, -1);
@@ -51,11 +56,32 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     total += get_at(global_id, 0, 1);
     total += get_at(global_id, 1, 1);
 
-    var alive_rules = array(0, 0, 1, 1, 0, 0, 0, 0, 0);
-    var dead_rules = array(0, 0, 0, 1, 0, 0, 0, 0, 0);
-    var rules = array(dead_rules, alive_rules);
+    var alive_rules = array(false, false, true, true, false, false, false, false, false);
+    var dead_rules = array(false, false, false, true, false, false, false, false, false);
 
-    let new_value = u32(rules[value][total]);
+    var is_alive: bool;
+    if old_value == u32(40) {
+        is_alive = alive_rules[total];
+    } else {
+        is_alive = dead_rules[total];
+    }
+
+    var new_value: u32;
+    if is_alive {
+        new_value = u32(40);
+    } else if old_value > u32(0) {
+        new_value = old_value - u32(1);
+    }
+
     output_buffer[index] = new_value;
-    textureStore(output_texture, vec2<u32>(global_id.x, global_id.y), vec4<f32>(f32(new_value), f32(new_value), f32(new_value), 1.0));
+    textureStore(
+      output_texture, 
+      vec2<u32>(global_id.x, global_id.y), 
+      vec4<f32>(
+        f32(new_value)/f32(40), 
+        f32(new_value)/f32(40), 
+        f32(new_value)/f32(40), 
+        1.0
+      )
+    );
 }
