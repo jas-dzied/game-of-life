@@ -27,12 +27,14 @@ fn from_xy(x: u32, y: u32) -> u32 {
     return y * params.width + x;
 }
 
+var<private> max_life: u32 = 255;
+
 fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
     let x = u32(modulus(i32(position.x) + x_mod, i32(params.width)));
     let y = u32(modulus(i32(position.y) + y_mod, i32(params.height)));
     let index = from_xy(x, y);
     let value = input_buffer[index];
-    if value == u32(40) {
+    if value == u32(max_life) {
       return u32(1);  
     } else {
       return u32(0);
@@ -60,7 +62,7 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     var dead_rules = array(false, false, false, true, false, false, false, false, false);
 
     var is_alive: bool;
-    if old_value == u32(40) {
+    if old_value == u32(max_life) {
         is_alive = alive_rules[total];
     } else {
         is_alive = dead_rules[total];
@@ -68,7 +70,7 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     var new_value: u32;
     if is_alive {
-        new_value = u32(40);
+        new_value = u32(max_life);
     } else if old_value > u32(0) {
         new_value = old_value - u32(1);
     }
@@ -78,9 +80,9 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
       output_texture, 
       vec2<u32>(global_id.x, global_id.y), 
       vec4<f32>(
-        f32(new_value)/f32(40), 
-        f32(new_value)/f32(40), 
-        f32(new_value)/f32(40), 
+        f32(new_value)/f32(max_life), 
+        f32(new_value)/f32(max_life), 
+        f32(new_value)/f32(max_life), 
         1.0
       )
     );
