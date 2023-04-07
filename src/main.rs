@@ -111,6 +111,10 @@ impl State {
     }
 
     async fn update(&mut self) {
+        let elapsed = self.last_frame.elapsed().as_micros() as f32;
+        println!("{}ms since last update", elapsed / 1000.0);
+        println!("({} fps)", 1000000.0 / elapsed);
+        self.last_frame = Instant::now();
         self.life.step(&self.device, &self.queue).await;
     }
 
@@ -128,14 +132,8 @@ impl State {
     }
 
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
-        let elapsed = self.last_frame.elapsed().as_micros() as f32;
-        println!("took {}ms", elapsed / 1000.0);
-        println!("({} fps)", 1000000.0 / elapsed);
-        let res = self
-            .renderer
-            .render(&self.surface, &self.device, &self.queue);
-        self.last_frame = Instant::now();
-        res
+        self.renderer
+            .render(&self.surface, &self.device, &self.queue)
     }
 }
 
