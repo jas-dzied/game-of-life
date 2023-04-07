@@ -58,8 +58,8 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     total += get_at(global_id, 0, 1);
     total += get_at(global_id, 1, 1);
 
-    var alive_rules = array(false, false, true, true, true, true, false, false, false);
-    var dead_rules = array(false, false, false, false, true, true, true, true, true);
+    var alive_rules = array(false, false, false, true, true, false, true, true, true);
+    var dead_rules = array(false, false, false, true, false, false, true, true, true);
 
     var is_alive: bool;
     if old_value == u32(max_life) {

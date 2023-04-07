@@ -113,7 +113,7 @@ impl State {
     }
 
     async fn update(&mut self) {
-        thread::sleep(Duration::from_millis(20));
+        thread::sleep(Duration::from_millis(30));
         let elapsed = self.last_frame.elapsed().as_micros() as f32;
         println!("{}ms since last update", elapsed / 1000.0);
         println!("({} fps)", 1000000.0 / elapsed);
@@ -149,7 +149,7 @@ async fn run() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     let mut rng = rand::thread_rng();
     let data = (0..(WIDTH * HEIGHT))
-        .map(|_| rng.gen_bool(0.2) as u32 * 200)
+        .map(|_| rng.gen_bool(0.5) as u32 * 200)
         .collect::<Vec<_>>();
     let mut state = State::new(window, data, life::Params::new(WIDTH, HEIGHT)).await;
 
