@@ -27,7 +27,7 @@ fn from_xy(x: u32, y: u32) -> u32 {
     return y * params.width + x;
 }
 
-var<private> max_life: u32 = 255;
+var<private> max_life: u32 = 1000;
 
 fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
     let x = u32(modulus(i32(position.x) + x_mod, i32(params.width)));

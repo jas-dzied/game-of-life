@@ -149,7 +149,7 @@ async fn run() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     let mut rng = rand::thread_rng();
     let data = (0..(WIDTH * HEIGHT))
-        .map(|_| rng.gen::<bool>() as u32 * 255)
+        .map(|_| rng.gen::<bool>() as u32 * 1000)
         .collect::<Vec<_>>();
     let mut state = State::new(window, data, life::Params::new(WIDTH, HEIGHT)).await;
 
