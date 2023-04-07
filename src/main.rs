@@ -39,7 +39,13 @@ impl State {
                 &wgpu::DeviceDescriptor {
                     label: None,
                     features: wgpu::Features::empty(),
-                    limits: wgpu::Limits::downlevel_defaults(),
+                    limits: wgpu::Limits {
+                        max_texture_dimension_2d: 16384,
+                        max_uniform_buffer_binding_size: 1073741824,
+                        max_storage_buffer_binding_size: 1073741824,
+                        max_buffer_size: 2147483647,
+                        ..Default::default()
+                    },
                 },
                 None,
             )
@@ -138,8 +144,8 @@ impl State {
     }
 }
 
-const WIDTH: u32 = 1920;
-const HEIGHT: u32 = 1200;
+const WIDTH: u32 = 8192;
+const HEIGHT: u32 = 8192;
 
 async fn run() {
     env_logger::init();
