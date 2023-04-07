@@ -35,7 +35,7 @@ fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
 }
 
 @compute
-@workgroup_size(1)
+@workgroup_size(16, 16)
 fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     let index = from_xy(global_id.x, global_id.y);
