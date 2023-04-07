@@ -27,7 +27,7 @@ fn from_xy(x: u32, y: u32) -> u32 {
     return y * params.width + x;
 }
 
-var<private> max_life: u32 = 1000;
+var<private> max_life: u32 = 200;
 
 fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
     let x = u32(modulus(i32(position.x) + x_mod, i32(params.width)));
@@ -72,18 +72,32 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     if is_alive {
         new_value = u32(max_life);
     } else if old_value > u32(0) {
-        new_value = old_value - u32(1);
+        new_value = old_value - u32(4);
     }
 
     output_buffer[index] = new_value;
-    textureStore(
-      output_texture, 
-      vec2<u32>(global_id.x, global_id.y), 
-      vec4<f32>(
-        f32(new_value)/f32(max_life), 
-        f32(new_value)/f32(max_life), 
-        f32(new_value)/f32(max_life), 
-        1.0
-      )
-    );
+
+    if new_value == u32(max_life) {
+        textureStore(
+          output_texture, 
+          vec2<u32>(global_id.x, global_id.y), 
+          vec4<f32>(
+            0.0, 
+            1.0, 
+            1.0, 
+            1.0
+          )
+        );
+    } else {
+        textureStore(
+          output_texture, 
+          vec2<u32>(global_id.x, global_id.y), 
+          vec4<f32>(
+            0.0, 
+            0.0, 
+            f32(new_value)/f32(max_life), 
+            1.0
+          )
+        );
+    }
 }
