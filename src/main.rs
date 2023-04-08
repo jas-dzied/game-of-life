@@ -149,7 +149,7 @@ async fn run() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     let mut rng = rand::thread_rng();
     let mut data = vec![0; (WIDTH * HEIGHT) as usize];
-    data[0] = 200;
+    data[((WIDTH * HEIGHT) / 2 + (WIDTH / 2)) as usize] = 200;
     //let data = (0..(WIDTH * HEIGHT))
     //    .map(|_| rng.gen_bool(0.5) as u32 * 200)
     //    .collect::<Vec<_>>();
