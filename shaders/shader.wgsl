@@ -58,6 +58,6 @@ var s_diffuse: sampler;
 @fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     let life = textureSample(t_diffuse, s_diffuse, in.tex_coords).x;
-    let new_color = hsv_to_rgb(vec3<f32>(life / 1.1, 1.0, 1.0));
+    let new_color = hsv_to_rgb(vec3<f32>(life - 0.01, 1.0, 1.0));
     return vec4<f32>(new_color, 1.0);
 }

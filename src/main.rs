@@ -141,31 +141,31 @@ impl State {
 }
 
 /// CONWAY'S GAME OF LIFE
-// const WIDTH: u32 = 400;
-// const HEIGHT: u32 = 400;
-// const FRAME_DELAY: u32 = 0;
-// const LIFETIME: u32 = 1000;
-// const ALIVE_RULES: [u32; 9] = [0, 0, 1, 1, 0, 0, 0, 0, 0];
-// const DEAD_RULES: [u32; 9] = [0, 0, 0, 1, 0, 0, 0, 0, 0];
-// fn generator() -> Vec<u32> {
-//     let mut rng = rand::thread_rng();
-//     (0..(WIDTH * HEIGHT))
-//         .map(|_| rng.gen_bool(0.5) as u32 * LIFETIME)
-//         .collect::<Vec<_>>()
-// }
+const WIDTH: u32 = 2880;
+const HEIGHT: u32 = 1800;
+const FRAME_DELAY: u32 = 0;
+const LIFETIME: u32 = 1000;
+const ALIVE_RULES: [u32; 9] = [0, 0, 1, 1, 0, 0, 0, 0, 0];
+const DEAD_RULES: [u32; 9] = [0, 0, 0, 1, 0, 0, 0, 0, 0];
+fn generator() -> Vec<u32> {
+    let mut rng = rand::thread_rng();
+    (0..(WIDTH * HEIGHT))
+        .map(|_| rng.gen_bool(0.5) as u32 * LIFETIME)
+        .collect::<Vec<_>>()
+}
 
 /// REPLICATOR
-const WIDTH: u32 = 400;
-const HEIGHT: u32 = 400;
-const FRAME_DELAY: u32 = 10;
-const LIFETIME: u32 = 100;
-const ALIVE_RULES: [u32; 9] = [0, 1, 0, 1, 0, 1, 0, 1, 0];
-const DEAD_RULES: [u32; 9] = [0, 1, 0, 1, 0, 1, 0, 1, 0];
-fn generator() -> Vec<u32> {
-    let mut data = vec![0; (WIDTH * HEIGHT) as usize];
-    data[((WIDTH * HEIGHT) / 2 + WIDTH / 2) as usize] = LIFETIME;
-    data
-}
+// const WIDTH: u32 = 2880;
+// const HEIGHT: u32 = 1800;
+// const FRAME_DELAY: u32 = 0;
+// const LIFETIME: u32 = 100;
+// const ALIVE_RULES: [u32; 9] = [0, 1, 0, 1, 0, 1, 0, 1, 0];
+// const DEAD_RULES: [u32; 9] = [0, 1, 0, 1, 0, 1, 0, 1, 0];
+// fn generator() -> Vec<u32> {
+//     let mut data = vec![0; (WIDTH * HEIGHT) as usize];
+//     data[((WIDTH * HEIGHT) / 2 + WIDTH / 2) as usize] = LIFETIME;
+//     data
+// }
 
 async fn run() {
     env_logger::init();
