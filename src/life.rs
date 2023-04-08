@@ -9,11 +9,58 @@ const WORKGROUP_SIZE: (u32, u32) = (16, 16);
 pub struct Params {
     pub width: u32,
     pub height: u32,
+    lifetime: u32,
+    a_rule_0: u32,
+    a_rule_1: u32,
+    a_rule_2: u32,
+    a_rule_3: u32,
+    a_rule_4: u32,
+    a_rule_5: u32,
+    a_rule_6: u32,
+    a_rule_7: u32,
+    a_rule_8: u32,
+    d_rule_0: u32,
+    d_rule_1: u32,
+    d_rule_2: u32,
+    d_rule_3: u32,
+    d_rule_4: u32,
+    d_rule_5: u32,
+    d_rule_6: u32,
+    d_rule_7: u32,
+    d_rule_8: u32,
 }
 
 impl Params {
-    pub fn new(width: u32, height: u32) -> Self {
-        Self { width, height }
+    pub fn new(
+        width: u32,
+        height: u32,
+        lifetime: u32,
+        alive_rules: [u32; 9],
+        dead_rules: [u32; 9],
+    ) -> Self {
+        Self {
+            width,
+            height,
+            lifetime,
+            a_rule_0: alive_rules[0],
+            a_rule_1: alive_rules[1],
+            a_rule_2: alive_rules[2],
+            a_rule_3: alive_rules[3],
+            a_rule_4: alive_rules[4],
+            a_rule_5: alive_rules[5],
+            a_rule_6: alive_rules[6],
+            a_rule_7: alive_rules[7],
+            a_rule_8: alive_rules[8],
+            d_rule_0: dead_rules[0],
+            d_rule_1: dead_rules[1],
+            d_rule_2: dead_rules[2],
+            d_rule_3: dead_rules[3],
+            d_rule_4: dead_rules[4],
+            d_rule_5: dead_rules[5],
+            d_rule_6: dead_rules[6],
+            d_rule_7: dead_rules[7],
+            d_rule_8: dead_rules[8],
+        }
     }
 }
 

@@ -1,6 +1,25 @@
 struct Params {
     width: u32,
     height: u32,
+    lifetime: u32,
+    a_rule_0: u32,
+    a_rule_1: u32,
+    a_rule_2: u32,
+    a_rule_3: u32,
+    a_rule_4: u32,
+    a_rule_5: u32,
+    a_rule_6: u32,
+    a_rule_7: u32,
+    a_rule_8: u32,
+    d_rule_0: u32,
+    d_rule_1: u32,
+    d_rule_2: u32,
+    d_rule_3: u32,
+    d_rule_4: u32,
+    d_rule_5: u32,
+    d_rule_6: u32,
+    d_rule_7: u32,
+    d_rule_8: u32,
 }
 
 @group(0)
@@ -27,14 +46,12 @@ fn from_xy(x: u32, y: u32) -> u32 {
     return y * params.width + x;
 }
 
-var<private> max_life: u32 = 200;
-
 fn get_at(position: vec3<u32>, x_mod: i32, y_mod: i32) -> u32 {
     let x = u32(modulus(i32(position.x) + x_mod, i32(params.width)));
     let y = u32(modulus(i32(position.y) + y_mod, i32(params.height)));
     let index = from_xy(x, y);
     let value = input_buffer[index];
-    if value == u32(max_life) {
+    if value == u32(params.lifetime) {
       return u32(1);  
     } else {
       return u32(0);
@@ -58,46 +75,53 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     total += get_at(global_id, 0, 1);
     total += get_at(global_id, 1, 1);
 
-    var alive_rules = array(false, true, false, true, false, true, false, true, false);
-    var dead_rules = array(false, true, false, true, false, true, false, true, false);
-
     var is_alive: bool;
-    if old_value == u32(max_life) {
-        is_alive = alive_rules[total];
+    var alive_rules = array(
+        params.a_rule_0, 
+        params.a_rule_1, 
+        params.a_rule_2, 
+        params.a_rule_3, 
+        params.a_rule_4, 
+        params.a_rule_5, 
+        params.a_rule_6, 
+        params.a_rule_7, 
+        params.a_rule_8, 
+    );
+    var dead_rules = array(
+        params.d_rule_0, 
+        params.d_rule_1, 
+        params.d_rule_2, 
+        params.d_rule_3, 
+        params.d_rule_4, 
+        params.d_rule_5, 
+        params.d_rule_6, 
+        params.d_rule_7, 
+        params.d_rule_8, 
+    );
+
+    if old_value == u32(params.lifetime) {
+        is_alive = alive_rules[total] == u32(1);
     } else {
-        is_alive = dead_rules[total];
+        is_alive = dead_rules[total] == u32(1);
     }
 
     var new_value: u32;
     if is_alive {
-        new_value = u32(max_life);
+        new_value = u32(params.lifetime);
     } else if old_value > u32(0) {
         new_value = old_value - u32(1);
     }
 
     output_buffer[index] = new_value;
 
-    if new_value == u32(max_life) {
-        textureStore(
-          output_texture, 
-          vec2<u32>(global_id.x, global_id.y), 
-          vec4<f32>(
-            0.0, 
-            1.0, 
-            1.0, 
-            1.0
-          )
-        );
-    } else {
-        textureStore(
-          output_texture, 
-          vec2<u32>(global_id.x, global_id.y), 
-          vec4<f32>(
-            0.0, 
-            0.0, 
-            f32(new_value)/f32(max_life), 
-            1.0
-          )
-        );
-    }
+    textureStore(
+      output_texture, 
+      vec2<u32>(global_id.x, global_id.y), 
+      vec4<f32>(
+        f32(new_value) / f32(params.lifetime), 
+        f32(new_value) / f32(params.lifetime), 
+        f32(new_value) / f32(params.lifetime), 
+        1.0
+      )
+    );
 }
